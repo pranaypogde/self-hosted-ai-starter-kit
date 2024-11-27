@@ -5,7 +5,7 @@ services:
     region: oregon
     plan: starter # $7/month
     runtime: docker
-    dockerfilePath: Dockerfile.n8n  # Changed from ./Dockerfile.n8n to Dockerfile.n8n
+    dockerfilePath: Dockerfile.n8n
     healthCheckPath: /
     envVars:
       - key: DB_TYPE
@@ -34,6 +34,10 @@ services:
         value: "false"
       - key: N8N_PERSONALIZATION_ENABLED
         value: "false"
+      - key: N8N_PROTOCOL
+        value: "http"
+      - key: NODE_TLS_REJECT_UNAUTHORIZED
+        value: "0"
     disk:
       name: n8n-data
       mountPath: /home/node/.n8n
@@ -45,7 +49,7 @@ services:
     region: oregon
     plan: starter # $7/month
     runtime: docker
-    dockerfilePath: Dockerfile.qdrant  # Changed from ./Dockerfile.qdrant to Dockerfile.qdrant
+    dockerfilePath: Dockerfile.qdrant
     disk:
       name: qdrant-data
       mountPath: /qdrant/storage

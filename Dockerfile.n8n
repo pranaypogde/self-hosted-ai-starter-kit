@@ -4,9 +4,11 @@ FROM n8nio/n8n:latest
 ENV NODE_ENV=production
 ENV N8N_HOST=localhost
 ENV N8N_PORT=5678
-ENV N8N_PROTOCOL=https
+ENV N8N_PROTOCOL=http
 ENV N8N_EDITOR_BASE_URL=
 ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+ENV N8N_METRICS=false
 
 # Create and set proper permissions for n8n directory
 USER root
