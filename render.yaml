@@ -3,7 +3,7 @@ services:
     name: n8n
     env: docker
     region: oregon
-    plan: standard
+    plan: starter
     healthCheckPath: /
     envVars:
       - key: DB_TYPE
@@ -41,7 +41,7 @@ services:
     name: qdrant
     env: docker
     region: oregon
-    plan: standard
+    plan: starter
     dockerfilePath: ./Dockerfile.qdrant
     disk:
       name: qdrant-data
@@ -52,7 +52,7 @@ services:
     name: ollama
     env: docker
     region: oregon
-    plan: standard
+    plan: starter
     dockerfilePath: ./Dockerfile.ollama
     disk:
       name: ollama-data
@@ -61,5 +61,6 @@ services:
 
 databases:
   - name: n8n-db
-    plan: standard
+    ipAllowList: []
     region: oregon
+    plan: starter # Updated to new plan
