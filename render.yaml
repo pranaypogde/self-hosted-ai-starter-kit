@@ -48,21 +48,14 @@ services:
       mountPath: /qdrant/storage
       sizeGB: 10
 
-  - type: web
-    name: ollama
-    env: docker
-    region: oregon
-    plan: starter
-    dockerfilePath: ./Dockerfile.ollama
-    disk:
-      name: ollama-data
-      mountPath: /root/.ollama
-      sizeGB: 20
-
 databases:
   - name: n8n-db
-    ipAllowList: []  # Only allow internal connections
+    databaseName: n8n_production
+    user: n8n_user
+    ipAllowList: 
+      - source: 0.0.0.0/0
+        description: everywhere
     region: oregon
-    plan: basic-1gb  # Using current supported plan
-    postgresMajorVersion: "16"  # Latest version
-    diskSizeGB: 15  # Default size for basic tier
+    plan: basic-1gb
+    postgresMajorVersion: "16"
+    diskSizeGB: 15
