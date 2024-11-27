@@ -61,6 +61,8 @@ services:
 
 databases:
   - name: n8n-db
-    ipAllowList: []
+    ipAllowList: []  # Only allow internal connections
     region: oregon
-    plan: starter # Updated to new plan
+    plan: basic-1gb  # Using current supported plan
+    postgresMajorVersion: "16"  # Latest version
+    diskSizeGB: 15  # Default size for basic tier
