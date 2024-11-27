@@ -10,16 +10,6 @@ ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
 
 # Create and set proper permissions for n8n directory
 USER root
-
-# Install Node.js
-RUN apt-get update && \
-    apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Set up n8n directory
 RUN mkdir -p /home/node/.n8n && \
     chown -R node:node /home/node/.n8n && \
     chmod -R 700 /home/node/.n8n
@@ -30,5 +20,6 @@ USER node
 # Expose port
 EXPOSE 5678
 
-# Start n8n
-CMD ["n8n", "start"]
+# Start n8n using the binary that's already in the image
+ENTRYPOINT ["/usr/local/bin/n8n"]
+CMD ["start"]
