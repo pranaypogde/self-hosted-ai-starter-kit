@@ -1,0 +1,65 @@
+services:
+  - type: web
+    name: n8n
+    env: docker
+    region: oregon
+    plan: standard
+    healthCheckPath: /
+    envVars:
+      - key: DB_TYPE
+        value: postgresdb
+      - key: DB_POSTGRESDB_HOST
+        fromDatabase:
+          name: n8n-db
+          property: host
+      - key: DB_POSTGRESDB_USER
+        fromDatabase:
+          name: n8n-db
+          property: user
+      - key: DB_POSTGRESDB_PASSWORD
+        fromDatabase:
+          name: n8n-db
+          property: password
+      - key: DB_POSTGRESDB_DATABASE
+        fromDatabase:
+          name: n8n-db
+          property: database
+      - key: N8N_ENCRYPTION_KEY
+        sync: false
+      - key: N8N_USER_MANAGEMENT_JWT_SECRET
+        sync: false
+      - key: N8N_DIAGNOSTICS_ENABLED
+        value: "false"
+      - key: N8N_PERSONALIZATION_ENABLED
+        value: "false"
+    disk:
+      name: n8n-data
+      mountPath: /home/node/.n8n
+      sizeGB: 10
+
+  - type: web
+    name: qdrant
+    env: docker
+    region: oregon
+    plan: standard
+    dockerfilePath: ./Dockerfile.qdrant
+    disk:
+      name: qdrant-data
+      mountPath: /qdrant/storage
+      sizeGB: 10
+
+  - type: web
+    name: ollama
+    env: docker
+    region: oregon
+    plan: standard
+    dockerfilePath: ./Dockerfile.ollama
+    disk:
+      name: ollama-data
+      mountPath: /root/.ollama
+      sizeGB: 20
+
+databases:
+  - name: n8n-db
+    plan: standard
+    region: oregon
