@@ -2,19 +2,31 @@
 
 This guide explains how to deploy the self-hosted AI starter kit on Render.com.
 
+## Estimated Monthly Costs
+
+Based on Render's pricing:
+- PostgreSQL (Basic-1gb): $23.50/month
+- N8N (Starter): $7/month
+- Qdrant (Starter): $7/month
+- Disk Storage (20GB total): $5/month
+  * N8N: 10GB ($2.50)
+  * Qdrant: 10GB ($2.50)
+
+Total estimated cost: $42.50 per month
+
 ## Services Overview
 
 The deployment consists of three main services:
 
 1. **PostgreSQL Database**
-   - Plan: basic-1gb
+   - Plan: basic-1gb ($23.50/month)
    - Version: PostgreSQL 16
-   - Disk: 15GB
+   - Disk: 15GB included
    - Purpose: Stores n8n workflows and data
 
 2. **N8N Workflow Automation**
-   - Plan: starter
-   - Disk: 10GB persistent storage
+   - Plan: starter ($7/month)
+   - Disk: 10GB persistent storage ($2.50/month)
    - Purpose: Orchestrates AI workflows
    - Features:
      * Automatic PostgreSQL integration
@@ -22,8 +34,8 @@ The deployment consists of three main services:
      * Custom workflow storage
 
 3. **Qdrant Vector Database**
-   - Plan: starter
-   - Disk: 10GB persistent storage
+   - Plan: starter ($7/month)
+   - Disk: 10GB persistent storage ($2.50/month)
    - Purpose: Vector similarity search
    - Custom Dockerfile configuration
 
@@ -99,7 +111,7 @@ services:
 
 ### Scaling
 - Monitor resource usage and upgrade plans as needed
-- Consider upgrading PostgreSQL to basic-4gb or pro tier for higher workloads
+- Consider upgrading PostgreSQL to basic-4gb for higher workloads
 - Adjust disk sizes based on data growth
 
 ### Security
@@ -117,6 +129,12 @@ services:
 - Set up monitoring for all services
 - Monitor disk usage and performance metrics
 - Set up alerts for critical service metrics
+
+## Cost Optimization
+- Start with starter plans for N8N and Qdrant
+- Monitor usage and adjust resources as needed
+- Consider disk size requirements carefully
+- Set up billing alerts to monitor costs
 
 ## Troubleshooting
 

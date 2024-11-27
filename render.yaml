@@ -3,7 +3,7 @@ services:
     name: n8n
     env: docker
     region: oregon
-    plan: starter
+    plan: starter # $7/month
     healthCheckPath: /
     envVars:
       - key: DB_TYPE
@@ -35,18 +35,18 @@ services:
     disk:
       name: n8n-data
       mountPath: /home/node/.n8n
-      sizeGB: 10
+      sizeGB: 10 # $2.50/month
 
   - type: web
     name: qdrant
     env: docker
     region: oregon
-    plan: starter
+    plan: starter # $7/month
     dockerfilePath: ./Dockerfile.qdrant
     disk:
       name: qdrant-data
       mountPath: /qdrant/storage
-      sizeGB: 10
+      sizeGB: 10 # $2.50/month
 
 databases:
   - name: n8n-db
@@ -56,6 +56,6 @@ databases:
       - source: 0.0.0.0/0
         description: everywhere
     region: oregon
-    plan: basic-1gb
+    plan: basic-1gb # $23.50/month
     postgresMajorVersion: "16"
-    diskSizeGB: 15
+    diskSizeGB: 15 # included in plan
