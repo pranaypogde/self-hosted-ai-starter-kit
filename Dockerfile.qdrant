@@ -1,6 +1,14 @@
 FROM qdrant/qdrant:latest
 
-EXPOSE 6333
-EXPOSE 6334
+# Expose API and gRPC ports
+EXPOSE 6333 6334
 
+# Set up storage volume
 VOLUME /qdrant/storage
+
+# Default configuration for production
+ENV QDRANT_ALLOW_RECOVERY_MODE=true
+ENV QDRANT_TELEMETRY_DISABLED=true
+
+# Start Qdrant
+CMD ["./qdrant"]

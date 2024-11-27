@@ -4,7 +4,8 @@ services:
     env: docker
     region: oregon
     plan: starter # $7/month
-    dockerfilePath: ./Dockerfile.n8n
+    runtime: docker
+    dockerfilePath: Dockerfile.n8n  # Changed from ./Dockerfile.n8n to Dockerfile.n8n
     healthCheckPath: /
     envVars:
       - key: DB_TYPE
@@ -43,7 +44,8 @@ services:
     env: docker
     region: oregon
     plan: starter # $7/month
-    dockerfilePath: ./Dockerfile.qdrant
+    runtime: docker
+    dockerfilePath: Dockerfile.qdrant  # Changed from ./Dockerfile.qdrant to Dockerfile.qdrant
     disk:
       name: qdrant-data
       mountPath: /qdrant/storage

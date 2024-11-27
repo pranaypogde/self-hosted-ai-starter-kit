@@ -23,11 +23,13 @@ The deployment consists of three main services:
    - Version: PostgreSQL 16
    - Disk: 15GB included
    - Purpose: Stores n8n workflows and data
+   - Access: Via connection string in Render dashboard
 
 2. **N8N Workflow Automation**
    - Plan: starter ($7/month)
    - Disk: 10GB persistent storage ($2.50/month)
    - Purpose: Orchestrates AI workflows
+   - Access: Web interface at `https://n8n-[your-app-name].onrender.com`
    - Features:
      * Automatic PostgreSQL integration
      * Secure environment variables
@@ -37,7 +39,53 @@ The deployment consists of three main services:
    - Plan: starter ($7/month)
    - Disk: 10GB persistent storage ($2.50/month)
    - Purpose: Vector similarity search
-   - Custom Dockerfile configuration
+   - Access: REST API at `https://qdrant-[your-app-name].onrender.com`
+   - Features:
+     * REST API interface
+     * gRPC interface (if needed)
+     * Persistent storage for vectors
+
+## Verifying Services
+
+### 1. N8N
+- Access URL: `https://n8n-[your-app-name].onrender.com`
+- You should see the N8N login page
+- Log in with your credentials
+- You can create and manage workflows through the web interface
+
+### 2. Qdrant
+- Access URL: `https://qdrant-[your-app-name].onrender.com`
+- The root endpoint returns API information (this is normal):
+  ```json
+  {
+    "title": "qdrant - vector search engine",
+    "version": "1.12.4",
+    "commit": "..."
+  }
+  ```
+- To verify it's working, you can:
+  1. Check the collections endpoint:
+     ```bash
+     curl https://qdrant-[your-app-name].onrender.com/collections
+     ```
+  2. Create a test collection:
+     ```bash
+     curl -X PUT https://qdrant-[your-app-name].onrender.com/collections/test_collection \
+       -H 'Content-Type: application/json' \
+       -d '{
+         "vectors": {
+           "size": 4,
+           "distance": "Cosine"
+         }
+       }'
+     ```
+
+### 3. PostgreSQL
+- Access: Via connection string in Render dashboard
+- To verify:
+  1. Get connection details from Render dashboard
+  2. Use a PostgreSQL client to connect
+  3. N8N will automatically use this database
 
 ## Required Files
 
@@ -96,52 +144,23 @@ During deployment, you'll need to set these secure variables:
 
 These should be strong, random values. Never reuse these values across different environments.
 
-### 5. Service URLs
-After deployment, your services will be available at:
-- N8N: `https://n8n-[your-app-name].onrender.com`
-- Qdrant: `https://qdrant-[your-app-name].onrender.com`
-- PostgreSQL: Connection details available in Render dashboard
+## Using the Services
 
-## Configuration Details
+### 1. N8N Workflows
+1. Access N8N at `https://n8n-[your-app-name].onrender.com`
+2. Create a new account on first login
+3. Start creating workflows
+4. Use Qdrant nodes to interact with your vector database
 
-### PostgreSQL Configuration
-```yaml
-databases:
-  - name: n8n-db
-    databaseName: n8n_production
-    user: n8n_user
-    plan: basic-1gb
-    postgresMajorVersion: "16"
-    diskSizeGB: 15
-```
+### 2. Qdrant Vector Database
+1. Access via REST API at `https://qdrant-[your-app-name].onrender.com`
+2. Use in your N8N workflows for vector operations
+3. API Documentation available at `https://qdrant-[your-app-name].onrender.com/dashboard`
 
-### N8N Configuration
-```yaml
-services:
-  - type: web
-    name: n8n
-    env: docker
-    plan: starter
-    dockerfilePath: ./Dockerfile.n8n
-    disk:
-      name: n8n-data
-      mountPath: /home/node/.n8n
-      sizeGB: 10
-```
-
-### Qdrant Configuration
-```yaml
-services:
-  - type: web
-    name: qdrant
-    env: docker
-    plan: starter
-    dockerfilePath: ./Dockerfile.qdrant
-    disk:
-      name: qdrant-data
-      mountPath: /qdrant/storage
-      sizeGB: 10
-```
+### 3. PostgreSQL Database
+1. Used automatically by N8N
+2. Access details available in Render dashboard
+3. Can be used for additional storage needs
 
 ## Production Considerations
 
@@ -166,34 +185,23 @@ services:
 - Monitor disk usage and performance metrics
 - Set up alerts for critical service metrics
 
-## Cost Optimization
-- Start with starter plans for N8N and Qdrant
-- Monitor usage and adjust resources as needed
-- Consider disk size requirements carefully
-- Set up billing alerts to monitor costs
-
 ## Troubleshooting
 
 ### Common Issues
-1. **Database Connection Issues**
-   - Verify database credentials
-   - Check network access settings
-   - Ensure SSL/TLS configuration is correct
+1. **Qdrant Returns Only API Information**
+   - This is normal for the root endpoint
+   - Use specific API endpoints for operations
+   - Check API documentation at `/dashboard`
 
-2. **N8N Startup Problems**
+2. **N8N Login Issues**
    - Verify environment variables are set correctly
    - Check n8n logs in Render dashboard
-   - Verify disk permissions
+   - Ensure database connection is working
 
-3. **Qdrant Connection Issues**
-   - Check Qdrant logs in Render dashboard
-   - Verify disk mount configuration
-   - Check network connectivity
-
-4. **Dockerfile Issues**
-   - Ensure all Dockerfile paths in render.yaml are correct
-   - Verify Dockerfile syntax
-   - Check if all required ports are exposed
+3. **Database Connection Issues**
+   - Verify credentials in Render dashboard
+   - Check network access settings
+   - Ensure SSL/TLS configuration is correct
 
 ### Support
 - Render Documentation: [docs.render.com](https://docs.render.com)
