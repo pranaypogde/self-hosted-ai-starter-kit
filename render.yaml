@@ -35,9 +35,13 @@ services:
       - key: N8N_PERSONALIZATION_ENABLED
         value: "false"
       - key: N8N_PROTOCOL
-        value: "http"
+        value: "https"
+      - key: N8N_SSL_CERT
+        value: "true"
       - key: NODE_TLS_REJECT_UNAUTHORIZED
-        value: "0"
+        value: "1"
+      - key: N8N_EDITOR_BASE_URL
+        value: "https://${RENDER_EXTERNAL_URL}"
     disk:
       name: n8n-data
       mountPath: /home/node/.n8n
